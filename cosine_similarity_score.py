@@ -19,7 +19,8 @@ class CosineScore:
                 for item in posting_list:
                     document_wight = self.tf_idf(item, df)
                     doc_score = 0 if not scores.get(item['doc_id']) else scores.get(item['doc_id'])
-                    print(scores.get(item['doc_id']), '-> ', document_wight,' : ',doc_score + query_wight * document_wight, '\n')
+                    print(scores.get(item['doc_id']), '-> ', document_wight, ' : ',
+                          doc_score + query_wight * document_wight, '\n')
                     scores.update({item['doc_id']: doc_score + query_wight * document_wight})
 
         return scores
@@ -47,5 +48,10 @@ class CosineScore:
 
 if __name__ == '__main__':
     c = CosineScore()
-    x = c.search('رئیس جمهور در مورد اهمیت حفظ محیط زیست و لزوم احیای دریاچه ارومیه گفت')
-    print({k: v for k, v in sorted(x.items(), key=lambda item: item[1], reverse=True)})
+    x = c.search('شهادت')
+    query = "select link from documents where id = ?"
+    result = {sqlite.select(f"select link from documents where id = {k}")[0]['link']: v for k, v in sorted(x.items(), key=lambda item: item[1], reverse=True)}
+    import pandas as pd
+
+    # result = pd.DataFrame(result)
+    print(result)

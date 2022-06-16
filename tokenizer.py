@@ -16,8 +16,15 @@ class Tokenizer:
 
     @classmethod
     def is_punc(cls, term):
-        punctuations = """!()-[]{};:'",<>.،/?@#$%^&*_~\\"""
+        punctuations = """–؛ «»!()-[]{};:'",<>.،/؟?@#$%^&*_~\\"""
         return term if term not in punctuations else None
+
+    @classmethod
+    def is_numeric(cls, term):
+        try:
+            int(term)
+        except:
+            return term
 
     @classmethod
     def find_tf(cls, data):
@@ -30,7 +37,7 @@ class Tokenizer:
         results = []
         terms = self.tokenize(data)
         for term in terms:
-            if self.is_punc(term):
+            if self.is_punc(term) and self.is_numeric(term):
                 results.append(self.normalize(term))
         results = self.find_tf(results)
         return results
